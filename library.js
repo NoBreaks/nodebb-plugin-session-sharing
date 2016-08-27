@@ -157,7 +157,7 @@ plugin.findUser = function(payload, callback) {
 
 	async.parallel({
 		uid: async.apply(db.getObjectField, plugin.settings.name + ':uid', id),
-		mergeUid: async.apply(db.sortedSetScore, 'email:uid', email)
+		mergeUid: async.apply(db.getObjectField, 'bnetId:uid', id), //async.apply(db.sortedSetScore, 'bnetId:uid', id)
 	}, function(err, checks) {
 		if (err) { return callback(err); }
 
@@ -177,8 +177,8 @@ plugin.findUser = function(payload, callback) {
 					});
 				}
 			});
-		} else if (email && email.length && checks.mergeUid && !isNaN(parseInt(checks.mergeUid, 10))) {
-			winston.info('[session-sharing] Found user via their email, associating this id (' + id + ') with their NodeBB account');
+		} else if (checks.mergeUid && !isNaN(parseInt(checks.mergeUid, 10))) {
+			winston.info('[session-sharing] Found user via their bnetId, associating this id (' + id + ') with their NodeBB account');
 			db.setObjectField(plugin.settings.name + ':uid', id, checks.mergeUid);
 			callback(null, checks.mergeUid);
 		} else {
@@ -209,6 +209,7 @@ plugin.createUser = function(payload, callback) {
 	username = username.trim().replace(/[^'"\s\-.*0-9\u00BF-\u1FFF\u2C00-\uD7FF\w]+/, '-');
 
 	user.create({
+    bnetId: id,
 		username: username,
 		email: email,
 		picture: picture,
