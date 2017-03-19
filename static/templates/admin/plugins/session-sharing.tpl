@@ -35,10 +35,36 @@
 				<div class="col-sm-2 col-xs-12 settings-header">Session Handling</div>
 				<div class="col-sm-10 col-xs-12">
 					<div class="form-group">
-						<select class="form-control" name="behaviour">
+						<label for="behaviour">Cookie changes</label>
+						<select class="form-control" name="behaviour" id="behaviour">
 							<option value="trust">"Trust" &rarr; Shared cookie token used once only to authenticate, session persists even if cookie cleared</option>
 							<option value="revalidate">"Revalidate" &rarr; Shared cookie is checked on every page load, and updated/logged out to reflect changes in cookie</option>
 						</select>
+					</div>
+					<div class="checkbox">
+						<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+							<input class="mdl-switch__input" type="checkbox" id="noRegistration" name="noRegistration" />
+							<span class="mdl-switch__label"><strong>Do not automatically create NodeBB accounts for unrecognized users</strong></span>
+						</label>
+						<div class="help-block">
+							By default, an unrecognized user id found in a payload cookie will have a local NodeBB account automatically created for it. If enabled,
+							that cookie will not resolve into a session and that client will remain a guest.
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="logoutRedirect">Logout Redirection</label>
+						<input type="text" class="form-control" id="logoutRedirect" name="logoutRedirect" />
+						<p class="help-block">
+							If set, once a user logs out from NodeBB, they will be sent to this link. Setting this option may be useful if you'd like to trigger
+							a session logout in your own application instead.
+						</p>
+					</div>
+					<div class="form-group">
+						<label for="loginOverride">Login Override</label>
+						<input type="text" class="form-control" id="loginOverride" name="loginOverride" />
+						<p class="help-block">
+							If set, users clicking the "Login" button will be redirected to this link instead
+						</p>
 					</div>
 				</div>
 			</div>
@@ -70,11 +96,11 @@
 					</div>
 					<div class="form-group">
 						<label for="payload:firstName">First Name</label>
-						<input type="text" id="payload:firstName" name="payload:firstName" title="First Name" class="form-control">
+						<input type="text" id="payload:firstName" name="payload:firstName" title="First Name" class="form-control" placeholder="firstName">
 					</div>
 					<div class="form-group">
 						<label for="payload:lastName">Last Name</label>
-						<input type="text" id="payload:lastName" name="payload:lastName" title="Last Name" class="form-control">
+						<input type="text" id="payload:lastName" name="payload:lastName" title="Last Name" class="form-control" placeholder="lastName">
 					</div>
 					<div class="form-group">
 						<label for="payload:picture">Picture</label>
